@@ -2,7 +2,9 @@ name: Our Workflow
 on: 
   push:
     branches: [ main ]
-    
+# 환경설정 변수 
+env:
+  REPOSITORY_NAME : helloweb:latest
 jobs:
   checkout:
     runs-on: ubuntu-latest
@@ -22,15 +24,15 @@ jobs:
         run: ./gradlew bootJar
       
       - name: docker image build
-        uses: docker build -t kimjisang/helloweb:latest .
+        uses: docker build -t ${{secrets.USERNAME}}/${{env.REPOSITORY_NAME}} .
       
       - name: docker hub login
         uses: docker/login-action@vl
         with:
-          username: ${{ secrets.USERNAME}}
-          password: ${{ secrets.PASSWORD}}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
       
       - name: docker hub push
-        run: docker push kimjisang/helloweb:latest
+        run: docker push ${{ secrets.USERNAME }}/${{env.REPOSITORY_NAME}}
       
       
