@@ -34,5 +34,19 @@ jobs:
       
       - name: docker hub push
         run: docker push ${{ secrets.USERNAME }}/${{env.REPOSITORY_NAME}}
-      
-      
+   deploy:
+     needs: build
+     name: 서버에 배포 단계
+     runs-on: [ self-hosted, label-go2]
+     steps:
+     - name: 운영서버에서
+       uses: docker/login-action@vl
+       with:
+         username: ${{ secrets.USERNAME }}
+         password: ${{ secrets.PASSWORD }}
+         
+     - name: docker-compose에서 이미지 다운로드
+       run: |
+         cd ~/helloWeb
+         docker-compose down
+         docker-compose pull
