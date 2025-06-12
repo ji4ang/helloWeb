@@ -23,6 +23,9 @@ jobs:
        
       - name: build gradlew
         run: ./gradlew bootJar
+
+      - name: build gradlew
+        run: ./gradlew --info test
       
       - name: docker image build
         run: docker build -t ${{secrets.USERNAME}}/${{env.REPOSITORY_NAME}} .
